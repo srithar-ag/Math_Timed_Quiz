@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Math Trainer</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: "Segoe UI", sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background: radial-gradient(circle at top,#111,#000);
+color:white;
+}
+
+/* Glass Card */
+
+.container{
+width:420px;
+padding:40px;
+border-radius:20px;
+
+background: rgba(20,20,20,0.7);
+backdrop-filter: blur(15px);
+
+box-shadow:
+0 0 20px rgba(255,0,0,0.25),
+0 0 60px rgba(255,0,0,0.15);
+
+text-align:center;
+}
+
+h1{
+margin-bottom:25px;
+color:#ff3b3b;
+letter-spacing:1px;
+}
+
+/* Question */
+
+#question{
+font-size:32px;
+margin:25px 0;
+font-weight:bold;
+}
+
+/* Input */
+
+input, select{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+background:#111;
+color:white;
+font-size:16px;
+outline:none;
+
+box-shadow: inset 0 0 8px rgba(255,0,0,0.3);
+}
+
+/* Buttons */
+
+button{
+padding:12px 25px;
+margin:10px 5px;
+border:none;
+border-radius:10px;
+
+background: linear-gradient(145deg,#ff1e1e,#9b0000);
+color:white;
+font-size:16px;
+
+cursor:pointer;
+transition:0.25s;
+}
+
+button:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+0 0 15px rgba(255,0,0,0.8),
+0 0 35px rgba(255,0,0,0.5);
+
+}
+
+/* Result */
+
+#result{
+margin-top:20px;
+font-size:16px;
+line-height:1.6;
+color:#ddd;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🧮 Math Trainer</h1>
+
+<select id="difficulty">
+<option value="1">Easy</option>
+<option value="2">Medium</option>
+<option value="3">Hard</option>
+</select>
+
+<div id="question">Press Start</div>
+
+<input id="answer" placeholder="Enter answer">
+
+<div>
+<button onclick="startQuiz()">Start</button>
+<button onclick="submitAnswer()">Submit</button>
+</div>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+let correctAnswer;
+let questionCount = 0;
+let correct = 0;
+let totalTime = 0;
+let startTime;
+
+function generateQuestion(){
+
+let level = document.getElementById("difficulty").value;
+
+let a,b,op;
+
+if(level==1){
+a=Math.floor(Math.random()*10)+1
+b=Math.floor(Math.random()*10)+1
+op=["+","-"][Math.floor(Math.random()*2)]
+}
+
+else if(level==2){
+a=Math.floor(Math.random()*50)+10
+b=Math.floor(Math.random()*20)+1
+op=["+","-","*"][Math.floor(Math.random()*3)]
+}
+
+else{
+a=Math.floor(Math.random()*100)+20
+b=Math.floor(Math.random()*20)+1
+op=["*","/"][Math.floor(Math.random()*2)]
+}
+
+if(op=="+") correctAnswer=a+b
+if(op=="-") correctAnswer=a-b
+if(op=="*") correctAnswer=a*b
+if(op=="/") correctAnswer=(a/b).toFixed(2)
+
+document.getElementById("question").innerText=a+" "+op+" "+b
+
+startTime=new Date().getTime()
+
+}
+
+function startQuiz(){
+
+questionCount=0
+correct=0
+totalTime=0
+
+generateQuestion()
+
+}
+
+function submitAnswer(){
+
+let userAnswer=document.getElementById("answer").value
+
+let endTime=new Date().getTime()
+let responseTime=(endTime-startTime)/1000
+
+totalTime+=responseTime
+
+questionCount++
+
+if(Math.abs(userAnswer-correctAnswer)<0.01){
+
+correct++
+
+document.getElementById("result").innerHTML=
+"✅ Correct! ⏱ "+responseTime.toFixed(2)+"s"
+
+}
+
+else{
+
+document.getElementById("result").innerHTML=
+"❌ Wrong! Correct: "+correctAnswer+" ⏱ "+responseTime.toFixed(2)+"s"
+
+}
+
+document.getElementById("answer").value=""
+
+if(questionCount>=5){
+
+let accuracy=(correct/5)*100
+
+document.getElementById("result").innerHTML+=
+
+"<br><br>📊 Quiz Finished"+
+"<br>Accuracy: "+accuracy+"%"+
+"<br>Total Time: "+totalTime.toFixed(2)+"s"+
+"<br>Average Time: "+(totalTime/5).toFixed(2)+"s"
+
+}
+
+else{
+
+setTimeout(generateQuestion,900)
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
