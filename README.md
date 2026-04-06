@@ -16,4 +16,4 @@ A modern web-based math training application that generates random math problems
 ## 🖥️ Technologies Used
 - HTML5 (Python Logic)
 
-No frameworks required — the project runs entirely in the browser.
+No frameworks/pipeline required 
